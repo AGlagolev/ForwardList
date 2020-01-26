@@ -122,7 +122,11 @@
 			New->pNext = Temp->pNext;
 			Temp->pNext = New;
 		}
+		void erase(int index) // HomeWork удаление по индексу
+		{
 
+		}
+		//Коректный деструктор для элементов
 	};
 
 	int Forwardlist::Element::count = 0;// инициализация статической переменной
