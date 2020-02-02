@@ -24,7 +24,7 @@
 			friend class Forwardlist;
 		};
 
-
+		int size;
 		Element* Head;
 	public:
 /************************* CONSTRUCTORS ***************************/
@@ -32,6 +32,7 @@
 		{
 			this->Head = nullptr;
 			std::cout << "LConstructor:\t" << this << std::endl;
+			this->size = 0;
 		}
 /************************* DESTRUCTOR ***************************/
 		~Forwardlist()
@@ -57,11 +58,18 @@
 			Element* New = new Element(Data);
 			New->pNext = Head;
 			Head = New;
+			size++;
 		}
 
 		//ДОБАВЛЕНИЕ ЭЛЕМЕНТА В КОНЕЦ СПИСКА
 		void push_back(int Data)
 		{
+			if (Head = nullptr)
+			{
+				push_front(Data);
+				return;
+			}
+
 			Element* Temp = Head; 
 			while (Temp->pNext != nullptr)
 			{				
@@ -69,6 +77,7 @@
 			} 
 			Element* New = new Element(Data);
 			Temp->pNext = New;
+			size++;
 		}
 
 		// УДАЛЕНИЕ ЭЛЕМЕНТА С НАЧАЛА СПИСКА
@@ -77,25 +86,21 @@
 			Element* Temp = Head; 
 			Head = Temp->pNext;					
 			delete Temp;
+			size--;
 		}
 
 		// УДАЛЕНИЕ ЭЛЕМЕНТА ИЗ КОНЦА СПИСКА
 		void pop_back()
-		{
-			Element* Old = Head;
-			while(Old->pNext != nullptr)
-			{
-				Old = Old->pNext;
-			}
+		{	
 			Element* Temp = Head;
-			while (Temp->pNext != Old)
+			while (Temp->pNext->pNext = nullptr) // !!!!!!!!!!!!!!!!!!!!!!!!!!!!! Просмотр на несколько элементов вперед
 			{
 				Temp = Temp->pNext;
 			}
 
+			delete Temp->pNext;
 			Temp->pNext = nullptr;
-			delete Old;
-			
+			size--;
 		}
 
 		//ДОБАВЛЕНИЕ ПО ИНДЕКСУ
@@ -108,14 +113,8 @@
 			} 
 
 			Element* Temp = Head;
-			int y = 0;
-			while(Temp->pNext != nullptr)
-			{
-				Temp = Temp->pNext;
-				y++;
-			}
-
-			if (index >= y)
+			
+			if (index >= this->size)
 			{
 				push_back(Data);
 				return;
@@ -132,49 +131,34 @@
 			//3)Вставляем новый элемент в список
 			New->pNext = Temp->pNext;
 			Temp->pNext = New;
+			size++;
 		}
 
 		//УДАЛЕНИЕ ПО ИНДЕКСУ
 		void erase(int index) 
-		{
-			Element* Old = Head;
+		{			
 			Element* Temp = Head;
 		    if (index == 0)
 			{
-				Head = Head->pNext;
-				delete Old;
+				pop_front();
+				return;
+			}	
+
+			if (index >= size)
+			{				
+				pop_back();
 				return;
 			}			
-
-			int y = 0;
-			while (Old->pNext != nullptr)
-			{
-				Old = Old->pNext;
-				y++;
-			}
-
-			if (index >= y)
-			{
-				while (Temp->pNext != Old)
-				{
-					Temp = Temp->pNext;
-				}
-				Temp->pNext = nullptr;
-				delete Old;
-				return;
-			}
 			
-			Old = Head;
-			for (int i = 0; i < index; i++)
-			{
-				Old = Old->pNext;
-			}
-			while (Temp->pNext != Old)
+			for (int i = 0; i < index-1; i++)
 			{
 				Temp = Temp->pNext;
 			}
-			Temp->pNext = Old->pNext;
-			delete Old;
+			
+			Element* buffer = Temp->pNext;
+			Temp->pNext = Temp->pNext->pNext;
+			delete buffer;
+			size--;			
 		}
 
 		//ВЫВОД СТРУКТУРЫ НА ЭКРАН
@@ -182,11 +166,17 @@
 		{
 			Element* Temp = Head; // Temp - итератор(указатель при помощи которого можно получить 
 			//доступ к элементам структуры данных)
+			int coun = 0;
+			std::cout << "-------------------------------------------------------------" << std::endl;
 			while (Temp)
-			{
-				std::cout << Temp << "\t" << Temp->Data << "\t" << Temp->pNext << std::endl;
+				
+			{				
+				std::cout << coun << "\t"<< Temp <<"\t" << Temp->Data << "\t" << Temp->pNext << std::endl;
+				std::cout << "-------------------------------------------------------------" << std::endl;
 				Temp = Temp->pNext;// Переход на следующий элемент
+				coun++;
 			}
+			std::cout << "\tcount = " << size << std::endl;
 		}
 	};
 #define DinDataStr
@@ -195,6 +185,7 @@ int Forwardlist::Element::count = 0;// инициализация статической переменной
 
 void main()
 {
+	system("color 0A");
 	setlocale(LC_ALL, "");
 #ifdef DinDataStr
 	int n;
@@ -204,15 +195,18 @@ void main()
 	{
 		fl.push_front(rand() % 100);
 	}
-		
+	int index;
 	fl.print();	
 	std::cout << "-----------------POP_BACK----------------" << std::endl;
 	fl.pop_back();
 	fl.print();
-	std::cout << "-----------------ERASE----------------" << std::endl;
-	int index;
+	std::cout << "-----------------ERASE----------------" << std::endl;	
 	std::cout << "Input Index: "; std::cin >> index;
 	fl.erase(index);
+	fl.print();
+	std::cout << "-----------------INSERT----------------" << std::endl;
+	std::cout << "Input Index: "; std::cin >> index;
+	fl.insert(index,1230);
 	fl.print();
 #endif // DinDataStr
 	
