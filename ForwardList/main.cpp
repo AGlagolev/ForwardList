@@ -34,19 +34,22 @@
 			std::cout << "LConstructor:\t" << this << std::endl;
 			this->size = 0;
 		}
+		// Создание листа на определенное количества элементов
+		explicit Forwardlist(int number):Forwardlist() // Делегирование конструкторов (до того как начнет работать один конструктор отработает другой) 
+		// explicit запрещает неявное преобразование типа Forwardlist list1 = 5
+		{
+			this->Head = nullptr;
+			std::cout << "LConstructor:\t" << this << std::endl;
+			this->size = 0;
+			
+			//for (int i = 0; i < number; i++) push_front(0);
+			while(number--) push_front(0);
+			std::cout << "LConstructor:\t" << this << std::endl;
+		}
 /************************* DESTRUCTOR ***************************/
 		~Forwardlist()
 		{				
-			Element* Temp = Head;
-			Element* Old = Head;
-			
-			while (Temp->pNext != nullptr)
-			{
-				Old = Temp;
-				Temp = Temp->pNext;
-				delete Old;
-			}			
-			delete Temp;
+			while (Head) pop_front(); // Destructor of elements
 			std::cout << "LDestructor:\t" << this << std::endl;
 		}
 
@@ -62,15 +65,18 @@
 		}
 
 		//ДОБАВЛЕНИЕ ЭЛЕМЕНТА В КОНЕЦ СПИСКА
+
 		void push_back(int Data)
 		{
-			if (Head = nullptr)
+			Element* Temp = Head;
+
+			if (Head == nullptr)
 			{
 				push_front(Data);
 				return;
 			}
 
-			Element* Temp = Head; 
+			
 			while (Temp->pNext != nullptr)
 			{				
 				Temp = Temp->pNext;// Переход на следующий элемент
@@ -93,7 +99,7 @@
 		void pop_back()
 		{	
 			Element* Temp = Head;
-			while (Temp->pNext->pNext = nullptr) // !!!!!!!!!!!!!!!!!!!!!!!!!!!!! Просмотр на несколько элементов вперед
+			while (Temp->pNext->pNext != nullptr) // !!!!!!!!!!!!!!!!!!!!!!!!!!!!! Просмотр на несколько элементов вперед
 			{
 				Temp = Temp->pNext;
 			}
@@ -110,9 +116,7 @@
 			{
 				push_front(Data);
 				return;
-			} 
-
-			Element* Temp = Head;
+			} 			
 			
 			if (index >= this->size)
 			{
@@ -120,6 +124,7 @@
 				return;
 			}
 
+			Element* Temp = Head;
 			//1) Создаем элемент
 			Element* New = new Element(Data);
 			//2) Доходим до нужной позиции в списке
@@ -144,9 +149,15 @@
 				return;
 			}	
 
+			if (index == size - 1)
+			{
+				pop_back();
+				return;
+			}
+
 			if (index >= size)
 			{				
-				pop_back();
+				std::cout <<std::endl << "Error" << std::endl;
 				return;
 			}			
 			
@@ -168,8 +179,7 @@
 			//доступ к элементам структуры данных)
 			int coun = 0;
 			std::cout << "-------------------------------------------------------------" << std::endl;
-			while (Temp)
-				
+			while (Temp)				
 			{				
 				std::cout << coun << "\t"<< Temp <<"\t" << Temp->Data << "\t" << Temp->pNext << std::endl;
 				std::cout << "-------------------------------------------------------------" << std::endl;
@@ -178,9 +188,22 @@
 			}
 			std::cout << "\tcount = " << size << std::endl;
 		}
+/************************* OPERATORS ***************************/
+		int& operator [](int index)
+		{
+			Element* Temp = Head;
+			for (int i = 0; i < index; i++)
+			{
+				Temp = Temp->pNext;
+			}
+			return Temp->Data;
+		}
+	
 	};
-#define DinDataStr
 
+
+//#define DinDataStr
+#define BASE_CHECK
 int Forwardlist::Element::count = 0;// инициализация статической переменной
 
 void main()
@@ -197,17 +220,45 @@ void main()
 	}
 	int index;
 	fl.print();	
-	std::cout << "-----------------POP_BACK----------------" << std::endl;
+
+	/*std::cout << "-----------------POP_BACK----------------" << std::endl;
 	fl.pop_back();
-	fl.print();
-	std::cout << "-----------------ERASE----------------" << std::endl;	
+	fl.print();*/
+
+	/*std::cout << "-----------------ERASE----------------" << std::endl;	
 	std::cout << "Input Index: "; std::cin >> index;
 	fl.erase(index);
-	fl.print();
+	fl.print();*/
+
 	std::cout << "-----------------INSERT----------------" << std::endl;
 	std::cout << "Input Index: "; std::cin >> index;
 	fl.insert(index,1230);
 	fl.print();
+
 #endif // DinDataStr
 	
+#ifdef BASE_CHECK
+
+	//int n = 5;
+	//Forwardlist list1(n);
+
+	/////////////////// Проверка записи случайных значений	
+	//for (int i = 0; i < n; i++)
+	//{
+	//	list1[i] = rand() % 100;
+	//}
+	/////////////////// Проверка оператора []
+	//for (int i = 0; i < n; i++)
+	//{
+	//	std::cout << list1[i] << "\t";
+	//}
+	//std::cout << std::endl;
+
+
+#endif // BASE_CHECK
+
+	// Home_work
+	//Конструктор копирования, оператор присваивания
+
 }
+
