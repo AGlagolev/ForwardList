@@ -34,18 +34,40 @@
 			std::cout << "LConstructor:\t" << this << std::endl;
 			this->size = 0;
 		}
+		
+		Forwardlist(std::initializer_list<int>il) :Forwardlist() // Контейнер - это объект в котором можно хранить данные 
+			// Объект типа initializer_list - шаблонный класс который создается неявно компилятором при использовании {}, 
+			// так как тип шаблонный <int> - указывает тип данных хранящихся в контейнере, il -это имя принимаемого параметра
+			// У любого контейнера есть два метода begin и end
+		{
+			std::cout << typeid(il.begin()).name() << std::endl; // запрос возвращает int const* - 
+			for (int const* it = il.begin(); it != il.end(); it++)
+			{
+				push_back(*it);
+			}
+			std::cout << "ILConstructor" << std::endl;
+		}
 		// Создание листа на определенное количества элементов
 		explicit Forwardlist(int number):Forwardlist() // Делегирование конструкторов (до того как начнет работать один конструктор отработает другой) 
 		// explicit запрещает неявное преобразование типа Forwardlist list1 = 5
 		{
-			this->Head = nullptr;
+			/*this->Head = nullptr;
 			std::cout << "LConstructor:\t" << this << std::endl;
-			this->size = 0;
+			this->size = 0;*/
 			
 			//for (int i = 0; i < number; i++) push_front(0);
 			while(number--) push_front(0);
 			std::cout << "LConstructor:\t" << this << std::endl;
 		}
+
+		Forwardlist(Forwardlist&& other)  // Создает буферный объект класса и побитно копирует в него other
+		{
+			this->size = other.size;
+			this->Head = other.Head;
+			other.Head = nullptr; // Обнуление указателя, чтоб после деструктора не затерлась область памяти на которую сейчас указывает this->str
+			std::cout << "MoveConstructor" << this << std::endl;
+		}
+
 /************************* DESTRUCTOR ***************************/
 		~Forwardlist()
 		{				
@@ -178,6 +200,9 @@
 			Element* Temp = Head; // Temp - итератор(указатель при помощи которого можно получить 
 			//доступ к элементам структуры данных)
 			int coun = 0;
+
+			std::cout << "-------------------------------------------------------------" << std::endl;
+			std::cout << "№" << "\t" << "Address" << "\t\t" << "Data" << "\t" << "pNext" << std::endl;
 			std::cout << "-------------------------------------------------------------" << std::endl;
 			while (Temp)				
 			{				
@@ -254,7 +279,10 @@ void main()
 	//}
 	//std::cout << std::endl;
 
-
+	Forwardlist list1 = {2,3,4,5,5};
+	Forwardlist list2;
+	//list2 = list1;
+	list2.print();
 #endif // BASE_CHECK
 
 	// Home_work
