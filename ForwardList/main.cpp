@@ -11,6 +11,13 @@ class Forwardlist
 		const Element* getNext() const { return pNext; }
 		const int getData() const { return Data; }
 
+		/************************* OPERATORS Element ***************************/
+		//////////////////////// ++
+		//friend Element* operator++(Element* th);
+		/*{
+			*this = *this->pNext;
+			return this;
+		}*/
 		/************************* CONSTRUCTORS Element***************************/		
 		Element(int Data, Element* pNext = nullptr)
 		{
@@ -139,18 +146,24 @@ public:
 	//ВЫВОД СТРУКТУРЫ НА ЭКРАН
 	void print()
 	{
-		Element* Temp = Head; // Temp - итератор(указатель при помощи которого можно получить 
-		//доступ к элементам структуры данных)
+		//Element* Temp = Head; // Temp - итератор(указатель при помощи которого можно получить 
+		////доступ к элементам структуры данных)
 		int coun = 0;
 
 		std::cout << "-------------------------------------------------------------" << std::endl;
 		std::cout << "№" << "\t" << "Address" << "\t\t" << "Data" << "\t" << "pNext" << std::endl;
 		std::cout << "-------------------------------------------------------------" << std::endl;
-		while (Temp)
+		//while (Temp)
+		//{
+		//	std::cout << coun << "\t" << Temp << "\t" << Temp->Data << "\t" << Temp->pNext << std::endl;
+		//	//std::cout << "-------------------------------------------------------------" << std::endl;
+		//	Temp = Temp->pNext;// Переход на следующий элемент
+		//	coun++;
+		//}
+		//std::cout << "\tcount = " << size << std::endl;
+		for (Element* Temp = Head; Temp; Temp++)
 		{
 			std::cout << coun << "\t" << Temp << "\t" << Temp->Data << "\t" << Temp->pNext << std::endl;
-			//std::cout << "-------------------------------------------------------------" << std::endl;
-			Temp = Temp->pNext;// Переход на следующий элемент
 			coun++;
 		}
 		std::cout << "\tcount = " << size << std::endl;
@@ -184,6 +197,7 @@ public:
 		std::cout << "MoveAssignmentOperator" << this << std::endl;
 		return *this;
 	}
+	
 
 	/************************* CONSTRUCTORS Forwardlist***************************/
 	Forwardlist()
@@ -243,6 +257,17 @@ public:
 //#define BASE_CHECK
 #define AM
 int Forwardlist::Element::count = 0;// инициализация статической переменной
+
+void print(int arr[])
+{
+	//for (int i : arr) // повторяет предведущий цикл
+	//{
+	//	std::cout << i << "\t";
+	//}
+	//std::cout << std::endl;
+}
+
+
 
 void main()
 {
@@ -320,6 +345,11 @@ void main()
 		std::cout << i << "\t";
 	}
 	std::cout << std::endl;
+
+	Forwardlist list1 = { 2,3,4,5,5 };
+	list1.print();
+
+
 #endif // AM
 
 }
