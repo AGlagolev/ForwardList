@@ -153,40 +153,18 @@ public:
 		//Element* Temp = Head; // Temp - итератор(указатель при помощи которого можно получить 
 		////доступ к элементам структуры данных)
 		int coun = 0;
-
 		std::cout << "-------------------------------------------------------------" << std::endl;
 		std::cout << "№" << "\t" << "Address" << "\t\t" << "Data" << "\t" << "pNext" << std::endl;
 		std::cout << "-------------------------------------------------------------" << std::endl;
-		//while (Temp)
-		//{
-		//	std::cout << coun << "\t" << Temp << "\t" << Temp->Data << "\t" << Temp->pNext << std::endl;
-		//	//std::cout << "-------------------------------------------------------------" << std::endl;
-		//	Temp = Temp->pNext;// Переход на следующий элемент
-		//	coun++;
-		//}
-		//std::cout << "\tcount = " << size << std::endl;
-		
+				
 		for (Element* Temp = Head; Temp; *Temp++)
 		{
-			/*std::cout << coun << "\t" << Temp << "\t" << Temp->Data << "\t" << Temp->pNext << std::endl;
-			coun++;*/
-			//*Temp++;
-			
+			std::cout << coun << "\t" << Temp << "\t" << Temp->Data << "\t" << Temp->pNext << std::endl;
+			coun++;
 		}
 		std::cout << "\tcount = " << size << std::endl;
 	}
-
-	//////////////////////// ++
-	Forwardlist::Element* operator++()
-	{
-
-	}
-	
-		//Element* Temp = this;
-		//Temp = this->pNext;
-		////this = this;
-		//return *this;
-	
+		
 	/************************* OPERATORS Forwardlist***************************/	
 	
 	///////////////////////// []		
