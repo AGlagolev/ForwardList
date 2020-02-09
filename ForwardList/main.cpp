@@ -7,7 +7,11 @@ class Forwardlist
 		Element* pNext;
 		static int count; //статическая переменная (инициализируется за классом)
 	public:
-		/************************* CONSTRUCTORS ***************************/
+		/************************* GET&SET Element ***************************/
+		const Element* getNext() const { return pNext; }
+		const int getData() const { return Data; }
+
+		/************************* CONSTRUCTORS Element***************************/		
 		Element(int Data, Element* pNext = nullptr)
 		{
 			this->Data = Data;
@@ -15,7 +19,8 @@ class Forwardlist
 			count++;
 			std::cout << "EConstructor:\t" << this << std::endl;
 		}
-		/************************* DESTRUCTOR ***************************/
+
+		/************************* DESTRUCTOR Element***************************/
 		~Element()
 		{
 			count--;
@@ -27,64 +32,13 @@ class Forwardlist
 	int size;
 	Element* Head;
 public:
-	/************************* CONSTRUCTORS ***************************/
-	Forwardlist()
-	{
-		this->Head = nullptr;
-		std::cout << "LConstructor:\t" << this << std::endl;
-		this->size = 0;
-	}
+	
 
-	Forwardlist(std::initializer_list<int>il) :Forwardlist() // Контейнер - это объект в котором можно хранить данные 
-		// Объект типа initializer_list - шаблонный класс который создается неявно компилятором при использовании {}, 
-		// так как тип шаблонный <int> - указывает тип данных хранящихся в контейнере, il -это имя принимаемого параметра
-		// У любого контейнера есть два метода begin и end
-	{
-		//std::cout << typeid(il.begin()).name() << std::endl; // запрос возвращает int const* - 
-		for (int const* it = il.begin(); it != il.end(); it++)
-		{
-			push_back(*it);
-		}
-		std::cout << "ILConstructor" << std::endl;
-	}
-	// Создание листа на определенное количества элементов
-	explicit Forwardlist(int number) :Forwardlist() // Делегирование конструкторов (до того как начнет работать один конструктор отработает другой) 
-	// explicit запрещает неявное преобразование типа Forwardlist list1 = 5
-	{
-		/*this->Head = nullptr;
-		std::cout << "LConstructor:\t" << this << std::endl;
-		this->size = 0;*/
-
-		//for (int i = 0; i < number; i++) push_front(0);
-		while (number--) push_front(0);
-		std::cout << "LConstructor:\t" << this << std::endl;
-	}
-
-	//Forwardlist(Forwardlist&& other)  // Создает буферный объект класса и побитно копирует в него other
-	//{
-	//	this->size = other.size;
-	//	this->Head = other.Head;
-	//	other.Head = nullptr; // Обнуление указателя, чтоб после деструктора не затерлась область памяти на которую сейчас указывает this->str
-	//	std::cout << "MoveConstructor" << this << std::endl;
-	//}
-
-	Forwardlist(const Forwardlist& that):Forwardlist()  // Создает буферный объект класса и побитно копирует в него other
-	{		
-		for (Element* Temp = Head; Temp != nullptr; Temp = Temp->pNext)	push_back(Temp->Data);				
-		std::cout << "CopyConstructor" << this << std::endl;
-	}
-
-	/************************* DESTRUCTOR ***************************/
-	~Forwardlist()
-	{
-
-		while (Head) pop_front(); // Destructor of elements
-		std::cout << "LDestructor:\t" << this << std::endl;
-	}
-
-
-	/************************* METODS ***************************/
+	/************************* METODS Forwardlist***************************/
 			//ДОБАВЛЕНИЕ ЭЛЕМЕНТА В НАЧАЛО СПИСКА
+	const Element* getHead() {return this->Head;}
+	int getSize(){return this->size;}
+
 	void push_front(int Data)
 	{
 		Element* New = new Element(Data);
@@ -94,22 +48,17 @@ public:
 	}
 
 	//ДОБАВЛЕНИЕ ЭЛЕМЕНТА В КОНЕЦ СПИСКА
-
 	void push_back(int Data)
 	{
 		Element* Temp = Head;
-
 		if (Head == nullptr)
 		{
 			push_front(Data);
 			return;
 		}
 
-
-		while (Temp->pNext != nullptr)
-		{
-			Temp = Temp->pNext;// Переход на следующий элемент
-		}
+		while (Temp->pNext != nullptr) Temp = Temp->pNext; // Переход на следующий элемент		
+		
 		Element* New = new Element(Data);
 		Temp->pNext = New;
 		size++;
@@ -128,11 +77,7 @@ public:
 	void pop_back()
 	{
 		Element* Temp = Head;
-		while (Temp->pNext->pNext != nullptr) // !!!!!!!!!!!!!!!!!!!!!!!!!!!!! Просмотр на несколько элементов вперед
-		{
-			Temp = Temp->pNext;
-		}
-
+		while (Temp->pNext->pNext != nullptr) Temp = Temp->pNext;// !!!!!!!!!!!!!!!!!!!!!!!!!!!!! Просмотр на несколько элементов вперед
 		delete Temp->pNext;
 		Temp->pNext = nullptr;
 		size--;
@@ -153,17 +98,10 @@ public:
 			return;
 		}
 
-		Element* Temp = Head;
-		//1) Создаем элемент
-		Element* New = new Element(Data);
-		//2) Доходим до нужной позиции в списке
-		Temp = Head;
-		for (int i = 0; i < index - 1; i++)
-		{
-			Temp = Temp->pNext;
-		}
-		//3)Вставляем новый элемент в список
-		New->pNext = Temp->pNext;
+		Element* Temp = Head; 		
+		Element* New = new Element(Data); //1) Создаем элемент		
+		for (int i = 0; i < index - 1; i++) Temp = Temp->pNext;//2) Доходим до нужной позиции в списке		
+		New->pNext = Temp->pNext; //3)Вставляем новый элемент в список
 		Temp->pNext = New;
 		size++;
 	}
@@ -190,10 +128,7 @@ public:
 			return;
 		}
 
-		for (int i = 0; i < index - 1; i++)
-		{
-			Temp = Temp->pNext;
-		}
+		for (int i = 0; i < index - 1; i++)	Temp = Temp->pNext;
 
 		Element* buffer = Temp->pNext;
 		Temp->pNext = Temp->pNext->pNext;
@@ -220,64 +155,98 @@ public:
 		}
 		std::cout << "\tcount = " << size << std::endl;
 	}
-	/************************* OPERATORS ***************************/
+	/************************* OPERATORS Forwardlist***************************/	
+	
 	///////////////////////// []		
 	int& operator [](int index)
 	{
 		Element* Temp = Head;
-		for (int i = 0; i < index; i++)
-		{
-			Temp = Temp->pNext;
-		}
+		for (int i = 0; i < index; i++) Temp = Temp->pNext;		
 		return Temp->Data;
 	}
-
-	///////////////////////// +
-	Forwardlist& operator+(Forwardlist& other)
-	{
-		Forwardlist buffer;
-		Element* Temp = other.Head;
-
-		//buffer.size += other.size;
-		while (Temp->pNext)
-		{
-			buffer.push_back(Temp->Data);
-			Temp = Temp->pNext;
-		}
-		Temp = Head;
-		while (Temp->pNext)
-		{
-			Temp = Temp->pNext;
-		}
-		Temp->pNext = buffer.Head;
-		//delete other.Head;
-		return *this;
-	}
+	
 	///////////////////////// =
-
-	Forwardlist& operator=(Forwardlist& other)
+	Forwardlist& operator=(const Forwardlist& that)
 	{
-		delete Head;
-
-		Head = other.Head;
-		size = other.size;
-		////this->str = other.str;
-		////other.str = nullptr;
-		//for (int i = 0; other[i]; i++) this[i] = other[i];
+		if (this == &that) return *this; // Исключение при  list1 = list1;		
+		while (Head) pop_front(); // затераем предведущий список
+		for (Element* Temp = that.Head; Temp != nullptr; Temp = Temp->pNext) push_back(Temp->Data); //Копируем данные в новые адреса
 		
-		std::cout << "MoveAssignmentOperator" << "\t" << this << std::endl;
+		std::cout << "CopyAssignmentOperator" << "\t" << this << std::endl;
 		return *this;
 	}
+	///////////////////////// = MOVE
+	Forwardlist& operator=(Forwardlist&& that)
+	{
+		this->Head = that.Head;
+		this->size = that.size;
+		that.Head = nullptr;
+		std::cout << "MoveAssignmentOperator" << this << std::endl;
+		return *this;
+	}
+
+	/************************* CONSTRUCTORS Forwardlist***************************/
+	Forwardlist()
+	{
+		this->Head = nullptr;
+		std::cout << "LConstructor:\t" << this << std::endl;
+		this->size = 0;
+	}
+
+	Forwardlist(std::initializer_list<int>il) :Forwardlist() // Контейнер - это объект в котором можно хранить данные 
+		// Объект типа initializer_list - шаблонный класс который создается неявно компилятором при использовании {}, 
+		// так как тип шаблонный <int> - указывает тип данных хранящихся в контейнере, il -это имя принимаемого параметра
+		// У любого контейнера есть два метода begin и end
+	{
+		//std::cout << typeid(il.begin()).name() << std::endl; // запрос возвращает int const* - 
+		for (int const* it = il.begin(); it != il.end(); it++)
+		{
+			push_back(*it);
+		}
+		std::cout << "ILConstructor" << std::endl;
+	}
+	// Создание листа на определенное количества элементов
+	explicit Forwardlist(int number) :Forwardlist() // Делегирование конструкторов (до того как начнет работать один конструктор отработает другой) 
+	// explicit запрещает неявное преобразование типа Forwardlist list1 = 5
+	{
+		
+		while (number--) push_front(0);
+		std::cout << "LConstructor:\t" << this << std::endl;
+	}
+
+	
+	Forwardlist(const Forwardlist& that) :Forwardlist()  // Создает буферный объект класса и побитно копирует в него other
+	{
+		for (Element* Temp = that.Head; Temp != nullptr; Temp = Temp->pNext) push_back(Temp->Data);
+		std::cout << "CopyConstructor" << this << std::endl;
+	}
+
+	Forwardlist(Forwardlist&& that) :Forwardlist()  // Создает буферный объект класса и побитно копирует в него other
+	{
+		this->Head = that.Head;
+		this->size = that.size;		
+		that.Head = nullptr;		
+		std::cout << "MoveConstructor" << this << std::endl;
+	}
+
+	/************************* DESTRUCTOR Forwardlist***************************/
+	~Forwardlist()
+	{
+		while (Head) pop_front(); // Destructor of elements
+		std::cout << "LDestructor:\t" << this << std::endl;
+	}
+	friend Forwardlist operator+(const Forwardlist& left, const Forwardlist& right);
 };
 
 
 //#define DinDataStr
-#define BASE_CHECK
+//#define BASE_CHECK
+#define AM
 int Forwardlist::Element::count = 0;// инициализация статической переменной
 
 void main()
 {
-	system("color 0A");
+	system("color 0F");
 	setlocale(LC_ALL, "");
 #ifdef DinDataStr
 	int n;
@@ -307,21 +276,20 @@ void main()
 #endif // DinDataStr
 
 #ifdef BASE_CHECK
-
 	
-
-	Forwardlist list1 = { 2,3,4,5,5 };
+	Forwardlist list1 = { 2,3,4,5,5 }; // ILConstructor
 	Forwardlist list2 = { 6,7,9 };
-	Forwardlist list3 = list2;
+	//Forwardlist list3 = list1 + list2; // MoveConstructor(если отсутствует первый -CopyConstructor)
+	//list3 = list2; // MoveAssignmentOperator(если отсутствует первый - CopyAssignmentOperator)
+	Forwardlist list3;	
 	std::cout << "-----------------list1----------------" << std::endl;
 	list1.print();
 	std::cout << "-----------------list2----------------" << std::endl;
-	list2.print();
+	list2.print();	
+    list3 = list1 + list2; 
 	std::cout << "-----------------list3----------------" << std::endl;
-	
 	list3.print();
-
-
+	
 	/*//int n = 5;
 	//Forwardlist list1(n);
 
@@ -339,8 +307,31 @@ void main()
 
 #endif // BASE_CHECK
 
-	// Home_work
-	//Конструктор копирования, оператор присваивания
+#ifdef AM
+	int arr[] = { 3,5,8,10,23 };
+	for (int i = 0; i < sizeof(arr)/sizeof(int); i++)
+	{
+		std::cout << arr[i] << "\t";
+	}
+	std::cout << std::endl;
 
+	for(int i:arr) // повторяет предведущий цикл
+	{
+		std::cout << i << "\t";
+	}
+	std::cout << std::endl;
+#endif // AM
+
+}
+
+///////////////////////// friend +
+Forwardlist operator+(const Forwardlist& left, const Forwardlist& right)
+{
+	std::cout << "GLOBAL+_BEGIN\t" << std::endl;
+	Forwardlist cat;
+	cat = left;
+	for (const Forwardlist::Element* Temp = right.Head; Temp; Temp = Temp->getNext()) cat.push_back(Temp->getData());
+	std::cout << "GLOBAL+_END\t" << std::endl << std::endl;
+	return cat;
 }
 
