@@ -1,4 +1,6 @@
 #include<iostream>
+
+
 class Forwardlist
 {
 	class Element
@@ -12,12 +14,12 @@ class Forwardlist
 		const int getData() const { return Data; }
 
 		/************************* OPERATORS Element ***************************/
-		//////////////////////// ++
-		//friend Element* operator++(Element* th);
-		/*{
-			*this = *this->pNext;
-			return this;
-		}*/
+		Element* operator++()
+		{
+			return this->pNext;
+		}
+		//friend std::ostream& operator<<(std::ostream& os, Element& x);
+		
 		/************************* CONSTRUCTORS Element***************************/		
 		Element(int Data, Element* pNext = nullptr)
 		{
@@ -34,6 +36,8 @@ class Forwardlist
 			std::cout << "EDestructor:\t" << this << std::endl;
 		}
 		friend class Forwardlist;
+
+		
 	};
 
 	int size;
@@ -161,13 +165,28 @@ public:
 		//	coun++;
 		//}
 		//std::cout << "\tcount = " << size << std::endl;
-		for (Element* Temp = Head; Temp; Temp++)
+		
+		for (Element* Temp = Head; Temp; *Temp++)
 		{
-			std::cout << coun << "\t" << Temp << "\t" << Temp->Data << "\t" << Temp->pNext << std::endl;
-			coun++;
+			/*std::cout << coun << "\t" << Temp << "\t" << Temp->Data << "\t" << Temp->pNext << std::endl;
+			coun++;*/
+			//*Temp++;
+			
 		}
 		std::cout << "\tcount = " << size << std::endl;
 	}
+
+	//////////////////////// ++
+	Forwardlist::Element* operator++()
+	{
+
+	}
+	
+		//Element* Temp = this;
+		//Temp = this->pNext;
+		////this = this;
+		//return *this;
+	
 	/************************* OPERATORS Forwardlist***************************/	
 	
 	///////////////////////// []		
@@ -333,18 +352,18 @@ void main()
 #endif // BASE_CHECK
 
 #ifdef AM
-	int arr[] = { 3,5,8,10,23 };
-	for (int i = 0; i < sizeof(arr)/sizeof(int); i++)
-	{
-		std::cout << arr[i] << "\t";
-	}
-	std::cout << std::endl;
+	//int arr[] = { 3,5,8,10,23 };
+	//for (int i = 0; i < sizeof(arr)/sizeof(int); i++)
+	//{
+	//	std::cout << arr[i] << "\t";
+	//}
+	//std::cout << std::endl;
 
-	for(int i:arr) // повторяет предведущий цикл
-	{
-		std::cout << i << "\t";
-	}
-	std::cout << std::endl;
+	//for(int i:arr) // повторяет предведущий цикл
+	//{
+	//	std::cout << i << "\t";
+	//}
+	//std::cout << std::endl;
 
 	Forwardlist list1 = { 2,3,4,5,5 };
 	list1.print();
@@ -365,3 +384,8 @@ Forwardlist operator+(const Forwardlist& left, const Forwardlist& right)
 	return cat;
 }
 
+//Forwardlist::Element& operator++(Forwardlist::Element& Temp)
+//{
+//
+//}
+//friend std::ostream& operator<<(std::ostream& os, Forwardlist::Element& x);
