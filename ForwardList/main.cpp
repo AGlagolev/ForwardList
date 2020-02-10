@@ -343,11 +343,7 @@ void main()
 	//}
 	//std::cout << std::endl;
 
-	//for(int i:arr) // повторяет предведущий цикл
-	//{
-	//	std::cout << i << "\t";
-	//}
-	//std::cout << std::endl;
+	
 
 	Forwardlist list1 = { 2,3,4,5,5 };
 	list1.print();
@@ -355,7 +351,19 @@ void main()
 	Forwardlist list2 = { 6,5,4,3,8 };
 	list2.print();
 	//Element
+	/*auto && __range = list1;
+	for (auto __begin = list1.getHead(), __end = nullptr; __begin != __end; ++__begin) 
+	{
+		Forwardlist::Element i = *__begin;
+		std::cout << i << "\t";
+	}*/
 
+
+	//for (int i : list1) // повторяет предведущий цикл
+	//{
+	//	std::cout << i << "\t";
+	//}
+	std::cout << std::endl;
 #endif // AM
 
 }
