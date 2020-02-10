@@ -14,37 +14,39 @@ class Forwardlist
 		const int getData() const { return Data; }
 
 		/************************* OPERATORS Element ***************************/
-		Element* operator++()
+		/*Element* operator++()
 		{
 			return this->pNext;
 		}
-		//friend std::ostream& operator<<(std::ostream& os, Element& x);
-		
+			*/	
 		/************************* CONSTRUCTORS Element***************************/		
 		Element(int Data, Element* pNext = nullptr)
 		{
 			this->Data = Data;
 			this->pNext = pNext;
 			count++;
-			std::cout << "EConstructor:\t" << this << std::endl;
+			//std::cout << "EConstructor:\t" << this << std::endl;
 		}
 
 		/************************* DESTRUCTOR Element***************************/
 		~Element()
 		{
 			count--;
-			std::cout << "EDestructor:\t" << this << std::endl;
+			//std::cout << "EDestructor:\t" << this << std::endl;
 		}
-		friend class Forwardlist;
-
-		
+		friend class Forwardlist;	
+		Element& operator++(int)
+		{
+			*this = *this->pNext;
+			return *this->pNext;
+		}
 	};
 
 	int size;
 	Element* Head;
 public:
 	
-
+	
 	/************************* METODS Forwardlist***************************/
 			//ДОБАВЛЕНИЕ ЭЛЕМЕНТА В НАЧАЛО СПИСКА
 	const Element* getHead() {return this->Head;}
@@ -156,13 +158,13 @@ public:
 		std::cout << "-------------------------------------------------------------" << std::endl;
 		std::cout << "№" << "\t" << "Address" << "\t\t" << "Data" << "\t" << "pNext" << std::endl;
 		std::cout << "-------------------------------------------------------------" << std::endl;
-				
-		for (Element* Temp = Head; Temp; *Temp++)
+						
+		for (Element* Temp = Head; Temp->pNext; (*Temp)++)
 		{
-			std::cout << coun << "\t" << Temp << "\t" << Temp->Data << "\t" << Temp->pNext << std::endl;
-			coun++;
+			std::cout << coun << "\t" << *Temp << "\t" << Temp->Data << "\t" << *Temp->pNext << std::endl;
+			coun++;			
 		}
-		std::cout << "\tcount = " << size << std::endl;
+		std::cout << "\tcount = " << size << std::endl;		
 	}
 		
 	/************************* OPERATORS Forwardlist***************************/	
@@ -200,7 +202,7 @@ public:
 	Forwardlist()
 	{
 		this->Head = nullptr;
-		std::cout << "LConstructor:\t" << this << std::endl;
+		//std::cout << "LConstructor:\t" << this << std::endl;
 		this->size = 0;
 	}
 
@@ -214,7 +216,7 @@ public:
 		{
 			push_back(*it);
 		}
-		std::cout << "ILConstructor" << std::endl;
+		//std::cout << "ILConstructor" << std::endl;
 	}
 	// Создание листа на определенное количества элементов
 	explicit Forwardlist(int number) :Forwardlist() // Делегирование конструкторов (до того как начнет работать один конструктор отработает другой) 
@@ -237,16 +239,20 @@ public:
 		this->Head = that.Head;
 		this->size = that.size;		
 		that.Head = nullptr;		
-		std::cout << "MoveConstructor" << this << std::endl;
+		//std::cout << "MoveConstructor" << this << std::endl;
 	}
 
 	/************************* DESTRUCTOR Forwardlist***************************/
 	~Forwardlist()
 	{
 		while (Head) pop_front(); // Destructor of elements
-		std::cout << "LDestructor:\t" << this << std::endl;
+		//std::cout << "LDestructor:\t" << this << std::endl;
 	}
 	friend Forwardlist operator+(const Forwardlist& left, const Forwardlist& right);
+	//friend const Forwardlist::Element* operator++(Forwardlist::Element* w) ;
+	friend std::ostream& operator<<(std::ostream& os, Forwardlist::Element& x);
+
+	
 };
 
 
@@ -346,6 +352,9 @@ void main()
 	Forwardlist list1 = { 2,3,4,5,5 };
 	list1.print();
 
+	Forwardlist list2 = { 6,5,4,3,8 };
+	list2.print();
+	//Element
 
 #endif // AM
 
@@ -361,9 +370,16 @@ Forwardlist operator+(const Forwardlist& left, const Forwardlist& right)
 	std::cout << "GLOBAL+_END\t" << std::endl << std::endl;
 	return cat;
 }
-
-//Forwardlist::Element& operator++(Forwardlist::Element& Temp)
+//const Forwardlist::Element* operator++(Forwardlist::Element& w)
+//{
+//	return w.getNext();
+//}
+//Forwardlist::Element* operator++(Forwardlist::Element* Temp)
 //{
 //
 //}
-//friend std::ostream& operator<<(std::ostream& os, Forwardlist::Element& x);
+std::ostream& operator<<(std::ostream& os, Forwardlist::Element& x) 
+{
+	os << x.getNext();
+	return os;
+}
